@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://www.paypal.com/sdk/js?client-id=ARvMn9_YxtG3fU_jAhqXh-Ks50O66nj35Am6f90seaRywnNuCCYxIVYXzFi5m0wZzyj_3gE2TXcVduix"></script>
+</head>
+
+<body>
+
+<h2>XenBridge Credits</h2>
+
+<div id="paypal-button-container"></div>
+
+<script>
+paypal.Buttons({
+    createOrder: function(data, actions) {
+        return actions.order.create({
+            purchase_units: [{
+                amount: {
+                    value: '5.00'
+                }
+            }]
+        });
+    },
+
+    onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+
+            fetch("/paypal-success", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    user_id: 1
+                })
+            });
+
+            alert("Payment successful!");
+        });
+    }
+}).render('#paypal-button-container');
+</script>
+
+</body>
+</html>
